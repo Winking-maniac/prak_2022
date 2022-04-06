@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeacherCourseId implements Serializable {
-    private long teacher_id;
-    private long course_id;
+    private Long teacher_id;
+    private Long course_id;
 }

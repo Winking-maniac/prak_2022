@@ -13,16 +13,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentCourse {
+    public StudentCourse(Long student_id, Long course_id) {
+        this.student_id = student_id;
+        this.course_id = course_id;
+    }
 
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long course_id;
+    private Long course_id;
 
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long student_id;
+    private Long student_id;
 
     @ManyToOne
     @NonNull

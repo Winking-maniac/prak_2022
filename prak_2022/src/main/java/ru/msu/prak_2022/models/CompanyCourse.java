@@ -13,16 +13,21 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyCourse {
+    public CompanyCourse(@NonNull Long company_id, @NonNull Long course_id, boolean is_author) {
+        this.company_id = company_id;
+        this.course_id = course_id;
+        this.is_author = is_author;
+    }
 
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long course_id;
+    private Long course_id;
 
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long company_id;
+    private Long company_id;
 
     @ManyToOne
     @NonNull

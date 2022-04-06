@@ -12,5 +12,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CourseId implements Serializable
 {
-    private long course_id;
+    private Long course_id;
 }

@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class StudentLessonId implements Serializable
 {
-    private long student_id;
-    private long course_id;
-    private long lesson_id;
+    private Long student_id;
+    private Long course_id;
+    private Long lesson_id;
 }

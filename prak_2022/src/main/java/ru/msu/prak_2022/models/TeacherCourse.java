@@ -13,15 +13,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeacherCourse {
+    public TeacherCourse(Long course_id, Long teacher_id, boolean is_admin) {
+        this.course_id = course_id;
+        this.teacher_id = teacher_id;
+        this.is_admin = is_admin;
+    }
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long course_id;
+    private Long course_id;
 
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long teacher_id;
+    private Long teacher_id;
 
     @ManyToOne
     @NonNull
@@ -34,6 +39,5 @@ public class TeacherCourse {
     private Course course;
 
     @Column(name = "is_admin")
-    @NonNull
     private boolean is_admin;
 }

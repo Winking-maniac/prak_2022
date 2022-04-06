@@ -34,7 +34,6 @@ public class HibConf {
         hibernateProperties.setProperty("connection_pool_size", "1");
 
         sessionFactory.setHibernateProperties(hibernateProperties);
-
         return sessionFactory;
     }
 

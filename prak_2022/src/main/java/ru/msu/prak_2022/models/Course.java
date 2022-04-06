@@ -19,7 +19,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     @NonNull
-    private long course_id;
+    private Long course_id;
 
     @Column(name = "course_name")
     @NonNull
@@ -52,4 +52,7 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private List<StudentCourse> students;
+
+    @OneToMany(mappedBy = "course")
+    private List<Lesson> lessons;
 }

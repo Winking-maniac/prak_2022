@@ -12,6 +12,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CompanyTeacherId implements Serializable
 {
-    private long teacher_id;
-    private long company_id;
+    private Long teacher_id;
+    private Long company_id;
 }

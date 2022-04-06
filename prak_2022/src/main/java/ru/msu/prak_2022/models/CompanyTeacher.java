@@ -17,12 +17,12 @@ public class CompanyTeacher {
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long teacher_id;
+    private Long teacher_id;
 
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long company_id;
+    private Long company_id;
 
     @ManyToOne
     @NonNull

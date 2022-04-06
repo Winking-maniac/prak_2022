@@ -17,7 +17,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     @NonNull
-    private long company_id;
+    private Long company_id;
 
     @Column(name = "company_name")
     @NonNull

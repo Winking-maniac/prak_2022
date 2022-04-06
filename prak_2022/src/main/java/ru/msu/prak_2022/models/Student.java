@@ -5,6 +5,7 @@ import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "student_hub")
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Student {
 
@@ -19,7 +21,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
     @NonNull
-    private long student_id;
+    private Long student_id;
 
     @Column(name = "surname")
     @NonNull
@@ -38,6 +40,19 @@ public class Student {
     @Formula(value = " concat(surname, ' ', first_name, ' ', last_name) ")
     private String fullName;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private List<StudentCourse> courses;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student)) return false;
+        Student student = (Student) o;
+        return getStudent_id().equals(student.getStudent_id()) && getSurname().equals(student.getSurname()) && getFirst_name().equals(student.getFirst_name()) && Objects.equals(getLast_name(), student.getLast_name()) && Objects.equals(getDescription(), student.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getStudent_id(), getSurname(), getFirst_name(), getLast_name(), getDescription());
+    }
 }

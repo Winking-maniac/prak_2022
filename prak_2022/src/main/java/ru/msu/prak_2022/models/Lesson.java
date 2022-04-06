@@ -3,7 +3,7 @@ package ru.msu.prak_2022.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -15,15 +15,37 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lesson {
+    public Lesson(@NonNull Long lesson_id,
+                  @NonNull Course course,
+                  @NonNull Teacher teacher) {
+        this.lesson_id = lesson_id;
+        this.course = course;
+        this.teacher = teacher;
+    }
+                  public Lesson(@NonNull Long lesson_id,
+                  @NonNull Course course,
+                  @NonNull Teacher teacher,
+                  @NonNull LocalTime time_from,
+                  @NonNull LocalTime time_till,
+                  String description
+                  ) {
+        this.lesson_id = lesson_id;
+        this.course = course;
+        this.teacher = teacher;
+        this.time_from = time_from;
+        this.time_till = time_till;
+        this.description = description;
+    }
+
     @Id
-    @Column(updatable = false, insertable = false)
+    @Column
     @NonNull
-    private long lesson_id;
+    private Long lesson_id;
 
     @Id
     @Column(updatable = false, insertable = false)
     @NonNull
-    private long course_id;
+    private Long course_id;
 
     @ManyToOne
     @NonNull
