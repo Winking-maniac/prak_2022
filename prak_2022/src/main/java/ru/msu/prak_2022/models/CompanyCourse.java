@@ -1,6 +1,7 @@
 package ru.msu.prak_2022.models;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -29,14 +30,14 @@ public class CompanyCourse {
     @NonNull
     private Long company_id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @NonNull
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id", updatable = false, insertable = false)
     private Course course;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @NonNull
-    @JoinColumn(name = "company_id", referencedColumnName = "company_id")
+    @JoinColumn(name = "company_id", referencedColumnName = "company_id", updatable = false, insertable = false)
     private Company company;
 
     @Column(name = "is_author")

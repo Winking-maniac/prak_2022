@@ -9,6 +9,7 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class StudentCourseId implements Serializable {
     private Long student_id;
     private Long course_id;

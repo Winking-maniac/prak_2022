@@ -29,20 +29,20 @@ public class StudentLesson {
     private Long lesson_id;
 
     @Id
-    @Column(updatable = false, insertable = false)
+    @Column
     @NonNull
     private Long course_id;
 
     @Id
-    @Column(updatable = false, insertable = false)
+    @Column
     @NonNull
     private Long student_id;
 
     @ManyToOne
     @NonNull
     @JoinColumns(value = {
-            @JoinColumn(name = "course_id", referencedColumnName = "course_id"),
-            @JoinColumn(name = "student_id", referencedColumnName = "student_id") })
+            @JoinColumn(updatable = false, insertable = false, name = "course_id", referencedColumnName = "course_id"),
+            @JoinColumn(updatable = false, insertable = false, name = "student_id", referencedColumnName = "student_id") })
     private StudentCourse student_course;
 
     @ManyToOne

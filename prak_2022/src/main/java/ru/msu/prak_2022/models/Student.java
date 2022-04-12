@@ -4,8 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "student_hub")
@@ -40,14 +39,13 @@ public class Student {
     @Formula(value = " concat(surname, ' ', first_name, ' ', last_name) ")
     private String fullName;
 
-    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
-    private List<StudentCourse> courses;
+    @OneToMany(mappedBy = "student")
+    private Set<StudentCourse> courses = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Student)) return false;
-        Student student = (Student) o;
+        if (!(o instanceof Student student)) return false;
         return getStudent_id().equals(student.getStudent_id()) && getSurname().equals(student.getSurname()) && getFirst_name().equals(student.getFirst_name()) && Objects.equals(getLast_name(), student.getLast_name()) && Objects.equals(getDescription(), student.getDescription());
     }
 

@@ -15,6 +15,21 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Teacher {
+    public Teacher(@NonNull String surname,
+               @NonNull String first_name) {
+        this(surname, first_name, "", "");
+    }
+
+    public Teacher(@NonNull String surname,
+                   @NonNull String first_name,
+                   String last_name,
+                   String description) {
+        this.surname = surname;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.description = description;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "teacher_id")

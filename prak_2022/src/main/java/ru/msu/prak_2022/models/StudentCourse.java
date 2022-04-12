@@ -19,22 +19,22 @@ public class StudentCourse {
     }
 
     @Id
-    @Column(updatable = false, insertable = false)
+    @Column
     @NonNull
     private Long course_id;
 
     @Id
-    @Column(updatable = false, insertable = false)
+    @Column
     @NonNull
     private Long student_id;
 
     @ManyToOne
     @NonNull
-    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
+    @JoinColumn(name = "student_id", referencedColumnName = "student_id", updatable = false, insertable = false)
     private Student student;
 
     @ManyToOne
     @NonNull
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id", updatable = false, insertable = false)
     private Course course;
 }

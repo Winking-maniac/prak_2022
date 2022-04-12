@@ -1,11 +1,13 @@
 package ru.msu.prak_2022.DAO_implementations;
 
+import lombok.val;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import ru.msu.prak_2022.gl_session;
 import ru.msu.prak_2022.models.Course;
 import ru.msu.prak_2022.models.Student;
 import ru.msu.prak_2022.status;
@@ -13,6 +15,7 @@ import ru.msu.prak_2022.status;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,8 +27,8 @@ class Student_DAO_implTest {
     @Autowired
     private Student_DAO_impl student_dao;
 
-    @Autowired
-    private SessionFactory sessionFactory;
+//    @Autowired
+//    private SessionFactory sessionFactory;
 
 //    @BeforeAll
 //    void before_all() {
@@ -33,7 +36,8 @@ class Student_DAO_implTest {
 //    }
     @BeforeEach
     void before() {
-        try (Session session = sessionFactory.openSession()) {
+        gl_session.open();
+        try (Session session = gl_session.sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE student_hub RESTART IDENTITY CASCADE;").executeUpdate();
 //            session.createSQLQuery("ALTER SEQUENCE person_person_id_seq RESTART WITH 1;").executeUpdate();
@@ -41,6 +45,7 @@ class Student_DAO_implTest {
         }
         student_dao.save(new Student(1L, "Ivanov", "Ivan"));
         student_dao.save(new Student(2L, "Petrov", "Petr"));
+        gl_session.close();
     }
 
     @AfterEach
@@ -51,17 +56,22 @@ class Student_DAO_implTest {
 
     @Test
     void get() {
-        status s = student_dao.get(1L).getKey();
-        assertEquals(status.OK, s);
+        gl_session.open();
+        AbstractMap.SimpleEntry<status, Student> s = student_dao.get(1L);
+        assertEquals(status.OK, s.getKey());
+        assertEquals(new Student(1L, "Ivanov", "Ivan"), s.getValue());
+        gl_session.close();
     }
 
     @Test
     void get_pattern() {
-        AbstractMap.SimpleEntry<status, Collection<Student>> s = student_dao.get("Ivanov");
+        gl_session.open();
+        AbstractMap.SimpleEntry<status, List<Student>> s = student_dao.get("Ivanov");
         AbstractMap.SimpleEntry<status, Student> exp = student_dao.get(1L);
         assertEquals(1, s.getValue().size());
         assertEquals(exp.getKey(), s.getKey());
-        assertEquals(exp.getValue(), s.getValue().toArray()[0]);
+        assertEquals(exp.getValue(), s.getValue().get(0));
+        gl_session.close();
     }
 
     @Test
@@ -71,7 +81,12 @@ class Student_DAO_implTest {
     @Test
     void courses() {
 //        student_dao.save(new Student(1L, "Ivanov", "Ivan"));
-        assertEquals(new AbstractMap.SimpleEntry<>(status.OK, new ArrayList<Course>()), student_dao.courses(student_dao.get(1L).getValue()));
+//        try(Session session = gl_session.sessionFactory.openSession()) {
+        gl_session.open();
+        AbstractMap.SimpleEntry<status, List<Course>> s = student_dao.courses(student_dao.get(1L).getValue());
+        assertEquals(status.OK, s.getKey());
+        assertEquals(0, s.getValue().size());
+        gl_session.close();
     }
 
     @Test

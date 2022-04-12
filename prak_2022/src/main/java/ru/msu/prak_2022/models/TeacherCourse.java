@@ -19,23 +19,23 @@ public class TeacherCourse {
         this.is_admin = is_admin;
     }
     @Id
-    @Column(updatable = false, insertable = false)
+    @Column
     @NonNull
     private Long course_id;
 
     @Id
-    @Column(updatable = false, insertable = false)
+    @Column
     @NonNull
     private Long teacher_id;
 
     @ManyToOne
     @NonNull
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
+    @JoinColumn(updatable = false, insertable = false, name = "teacher_id", referencedColumnName = "teacher_id")
     private Teacher teacher;
 
     @ManyToOne
     @NonNull
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    @JoinColumn(updatable = false, insertable = false, name = "course_id", referencedColumnName = "course_id")
     private Course course;
 
     @Column(name = "is_admin")
