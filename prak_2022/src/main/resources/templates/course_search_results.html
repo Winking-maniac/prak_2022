@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 70px;
+        }
+    </style>
+    <title>Результаты поиска</title>
+</head>
+<body>
+<div th:replace="general :: page-header"></div>
+<div class="indent">
+    <form method="get" action="/search/courses">
+        <input type="text" th:value="${pattern}" name="pattern"/>
+        <button type="submit" class="btn btn-secondary">Найти</button>
+    </form>
+    <h1>Курсы</h1>
+    <table class="table table-bordered table-warning">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col"> Название</th>
+            <th scope="col"> Дата начала</th>
+            <th scope="col"> Дата окончания</th>
+            <th scope="col"> Учебная нагрузка(в неделю)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${search_result.isEmpty()}">
+            <td colspan="6"> Курсы не найдены </td>
+        </tr>
+        <tr th:each="course : ${search_result}">
+            <td>
+                <a th:href="'/course?course_id=' + ${course.getCourse_id()}">
+                    <span th:text="${course.getCourse_name()}"> </span>
+                </a>
+            </td>
+            <td>
+                <span th:text="${course.getDate_from()}"> </span>
+            </td>
+            <td>
+                <span th:text="${course.getDate_till()}"> </span>
+            </td>
+            <td>
+                <span th:text="${course.getLesson_intensivity()} + ' часов аудиторных занятий'"></span>
+                <br>
+                <span th:text="${course.getSelf_study_intensivity()} + ' часов самостоятельной работы'"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>

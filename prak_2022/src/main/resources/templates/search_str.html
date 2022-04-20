@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 70px;
+        }
+    </style>
+    <title>Поиск</title>
+</head>
+<body>
+<div th:replace="general :: page-header"></div>
+<div class="indent">
+    <h1>
+        Добро пожаловать на платформу Granite
+    </h1>
+    Здесь вы можете пройти существующие курсы, или создать и провести свои. Для поиска воспользуйтесь формой ниже или перейдите к <a href="/search">полному списку</a>
+    <form method="get" action="/search">
+        <input type="text" name="pattern"/>
+        <button type="submit" class="btn btn-secondary">Найти</button>
+    </form>
+</div>
+
+<div th:replace="general :: site-footer"></div>
+</body>

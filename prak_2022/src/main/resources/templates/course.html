@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 70px;
+        }
+    </style>
+    <title>Курс</title>
+</head>
+<body>
+<div th:replace="general :: page-header"></div>
+<div class="indent">
+    <h1><p th:text="${course.getCourse_name()}"></h1>
+    <br>
+    <b>Дата начала:</b> <p th:text="${course.getDate_from()}"></p>
+    <br>
+    <b>Дата окончания:</b> <p th:text="${course.getDate_till()}"></p>
+    <h3>Описание</h3>
+    <p th:text="${course.getDescription()}"></p>
+</div>
+
+<div th:replace="general :: site-footer"></div>
+<div th:replace="general :: site-script"></div>
+</body>
