@@ -1,6 +1,7 @@
 package ru.msu.prak_2022.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,10 @@ public class SearchController {
     Company_DAO company_dao;
 
     @GetMapping("/")
-    public String search_str(Model model) {
+    public String search_str(Model model, Authentication authentication) {
 //        model.addAttribute("data", "Hello world, " + id);
+        model.addAttribute("authenticated", authentication != null);
+        if (authentication != null) model.addAttribute("user", authentication.getName());
         return "search_str";
     }
 
