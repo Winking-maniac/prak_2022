@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
+import static ru.msu.prak_2022.AuthInterceptor.add_auth;
+
 @Controller
 public class SearchController {
 
@@ -30,15 +32,16 @@ public class SearchController {
 
     @GetMapping("/")
     public String search_str(Model model, Authentication authentication) {
-//        model.addAttribute("data", "Hello world, " + id);
+        add_auth(model, authentication);
         model.addAttribute("authenticated", authentication != null);
         if (authentication != null) model.addAttribute("user", authentication.getName());
         return "search_str";
     }
 
     @GetMapping("/search")
-    public String search_results(Model model, @RequestParam(defaultValue = "") String pattern) {
+    public String search_results(Model model, @RequestParam(defaultValue = "") String pattern, Authentication auth) {
         gl_session.open();
+        add_auth(model, auth);
         model.addAttribute("pattern", pattern);
         AbstractMap.SimpleEntry<status, List<Course>> res_courses = course_dao.get(pattern);
         AbstractMap.SimpleEntry<status, List<Teacher>> res_teachers = teacher_dao.get(pattern);
@@ -57,30 +60,31 @@ public class SearchController {
     }
 
     @GetMapping("/search/courses")
-    String courses_search_results(Model model, @RequestParam(defaultValue = "") String pattern) {
-        String res = search_result(model, pattern, course_dao);
+    String courses_search_results(Model model, @RequestParam(defaultValue = "") String pattern, Authentication auth) {
+        String res = search_result(model, pattern, course_dao, auth);
         if (Objects.equals(res, "search_results")) res = "course_search_results";
         return res;
     }
 
     @GetMapping("/search/teachers")
-    String teachers_search_results(Model model, @RequestParam(defaultValue = "") String pattern) {
-        String res = search_result(model, pattern, teacher_dao);
+    String teachers_search_results(Model model, @RequestParam(defaultValue = "") String pattern, Authentication auth) {
+        String res = search_result(model, pattern, teacher_dao, auth);
         if (Objects.equals(res, "search_results")) res = "teacher_search_results";
         return res;
     }
 
     @GetMapping("/search/companies")
-    String companies_search_results(Model model, @RequestParam(defaultValue = "") String pattern) {
-        String res = search_result(model, pattern, company_dao);
+    String companies_search_results(Model model, @RequestParam(defaultValue = "") String pattern, Authentication auth) {
+        String res = search_result(model, pattern, company_dao, auth);
         if (Objects.equals(res, "search_results")) res = "company_search_results";
         return res;
     }
 
-    private String search_result(Model model, @RequestParam String pattern, Searchable dao_class) {
+    private String search_result(Model model, @RequestParam String pattern, Searchable dao_class, Authentication auth) {
         String result = "error";
         gl_session.open();
         model.addAttribute("pattern", pattern);
+        add_auth(model, auth);
             AbstractMap.SimpleEntry<status, List<Course>> res = dao_class.get(pattern);
             if (res.getKey() == status.OK) {
                 model.addAttribute("search_result", res.getValue());

@@ -1,6 +1,7 @@
 package ru.msu.prak_2022;
 
 import antlr.BaseAST;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,25 +13,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import ru.msu.prak_2022.DAO_implementations.User_DAO;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user1").password(passwordEncoder().encode("user1Pass")).roles("USER")
-                .and()
-                .withUser("user2").password(passwordEncoder().encode("user2Pass")).roles("USER")
-                .and()
-                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN");
-    }
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    User_DAO user_dao;
+
+//    @Override
+//    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("user1").password(passwordEncoder.encode("user1Pass")).roles("USER")
+//                .and()
+//                .withUser("user2").password(passwordEncoder.encode("user2Pass")).roles("USER")
+//                .and()
+//                .withUser("admin").password(passwordEncoder.encode("adminPass")).roles("ADMIN");
+//    }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -39,6 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/").permitAll()
+                .antMatchers("/registration").anonymous()
+                .antMatchers("/registration/**").anonymous()
                 .antMatchers("/login*").permitAll()
                 .anyRequest().authenticated()
 
@@ -73,4 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    public AuthenticationFailureHandler authenticationFailureHandler() {
 //        return new CustomAuthenticationFailureHandler();
 //    }
+    @Autowired
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(user_dao).passwordEncoder(passwordEncoder);
+    }
 }

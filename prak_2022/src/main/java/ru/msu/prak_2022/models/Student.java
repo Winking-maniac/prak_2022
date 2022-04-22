@@ -15,12 +15,15 @@ import java.util.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Student {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
     @NonNull
     private Long student_id;
+
+    @Column
+    @NonNull
+    private String username;
 
     @Column(name = "surname")
     @NonNull

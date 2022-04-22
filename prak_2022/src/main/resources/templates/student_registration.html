@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 70px;
+        }
+    </style>
+  <title>Регистрация</title>
+</head>
+<body>
+<div th:replace="general :: page-header"></div>
+<div class="indent">
+  <h1>Создание аккаунта студента</h1>
+  <div th:if="${passwordError}" class="alert alert-danger" role="alert">
+    Пароли не совпадают
+  </div>
+  <form class="was-validated" method="post" action="/registration/student">
+    <div class="form-row">
+      <div class="form-group col md-6">
+        <label for="validation_username">Имя пользователя</label>
+        <input type="text" class="form-control is-invalid" id="validation_username" placeholder="username" name="username" required></input>
+        <div class="invalid-feedback">
+          Выберите имя пользователя
+        </div>
+      </div>
+
+      <div class="form-group col md-6">
+        <label for="validation_passwd">Пароль</label>
+        <input type="password" class="form-control is-invalid" id="validation_passwd" placeholder="password" name="passwd" required></input>
+        <div class="invalid-feedback">
+          Введите пароль
+        </div>
+      </div>
+
+
+      <div class="form-group col md-6">
+        <label for="validation_passwd_confirm">Повторите пароль</label>
+        <input type="password" class="form-control is-invalid" id="validation_passwd_confirm" placeholder="password" name="passwd_confirm" required></input>
+        <div class="invalid-feedback">
+          Введите пароль
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+
+      <div class="form-group col md-6">
+        <label for="validation_surname">Фамилия</label>
+        <input type="text" class="form-control is-invalid" id="validation_surname" placeholder="Иванов" name="surname" required></input>
+        <div class="invalid-feedback">
+          Введите фамилию
+        </div>
+      </div>
+
+      <div class="form-group col md-6">
+        <label for="validation_firstname">Имя</label>
+        <input type="text" class="form-control is-invalid" id="validation_firstname" placeholder="Иван" name="first_name" required></input>
+        <div class="invalid-feedback">
+          Введите имя
+        </div>
+      </div>
+
+      <div class="form-group col md-6">
+        <label for="validation_lastname">Отчество</label>
+        <input type="text" class="form-control is-invalid" id="validation_lastname" placeholder="Иванович" name="last_name"></input>
+      </div>
+
+    </div>
+
+    <div class="mb-3">
+      <label for="validationTextarea">О себе</label>
+      <textarea class="form-control is-invalid" id="validationTextarea" placeholder="Здесь можно написать о своем образовании или увлечениях" name="description"></textarea>
+    </div>
+    <div class="custom-control custom-checkbox mb-3">
+      <input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
+      <label class="custom-control-label" for="customControlValidation1">Я согласен с условиями регистрации и обработки информации</label>
+      <div class="invalid-feedback">Вы должны согласиться с условиями регистрации для продолжения</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+  </form>
+</div>
+<div th:replace="general :: site-footer"></div>
+</body>
+</html>

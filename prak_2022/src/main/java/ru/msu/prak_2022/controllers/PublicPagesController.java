@@ -2,6 +2,7 @@ package ru.msu.prak_2022.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import ru.msu.prak_2022.models.Teacher;
 import ru.msu.prak_2022.status;
 
 import java.util.AbstractMap;
+
+import static ru.msu.prak_2022.AuthInterceptor.add_auth;
 
 @Controller
 public class PublicPagesController {
@@ -40,7 +43,8 @@ public class PublicPagesController {
     }
 
     @RequestMapping("/course")
-    public String public_course(Model model, @RequestParam(defaultValue="0") Long course_id) {
+    public String public_course(Model model, @RequestParam(defaultValue="0") Long course_id, Authentication auth) {
+        add_auth(model, auth);
         AbstractMap.SimpleEntry<status, Course> res = course_dao.get(course_id);
         if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
         if (status.OK != res.getKey()) throw new InternalErrorException();
@@ -49,7 +53,8 @@ public class PublicPagesController {
     }
 
     @RequestMapping("/teacher")
-    public String public_teacher(Model model, @RequestParam(defaultValue="0") Long teacher_id) {
+    public String public_teacher(Model model, @RequestParam(defaultValue="0") Long teacher_id, Authentication auth) {
+        add_auth(model, auth);
         AbstractMap.SimpleEntry<status, Teacher> res = teacher_dao.get(teacher_id);
         if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
         if (status.OK != res.getKey()) throw new InternalErrorException();
@@ -58,7 +63,8 @@ public class PublicPagesController {
     }
 
     @RequestMapping("/company")
-    public String public_company(Model model, @RequestParam(defaultValue="0") Long company_id) {
+    public String public_company(Model model, @RequestParam(defaultValue="0") Long company_id, Authentication auth) {
+        add_auth(model, auth);
         AbstractMap.SimpleEntry<status, Company> res = company_dao.get(company_id);
         if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
         if (status.OK != res.getKey()) throw new InternalErrorException();
@@ -67,7 +73,8 @@ public class PublicPagesController {
     }
 
     @RequestMapping("/student")
-    public String public_student(Model model, @RequestParam(defaultValue="0") Long student_id) {
+    public String public_student(Model model, @RequestParam(defaultValue="0") Long student_id, Authentication auth) {
+        add_auth(model, auth);
         AbstractMap.SimpleEntry<status, Student> res = student_dao.get(student_id);
         if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
         if (status.OK != res.getKey()) throw new InternalErrorException();
