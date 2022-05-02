@@ -16,14 +16,14 @@
 <body>
 <div th:replace="general :: page-header"></div>
 <div class="indent">
-  <h1>Создание аккаунта студента</h1>
+  <h1>Создание аккаунта компании</h1>
   <div th:if="${passwordError}" class="alert alert-danger" role="alert">
     Пароли не совпадают
   </div>
   <div th:if="${usernameError}" class="alert alert-danger" role="alert">
     Пользователь с таким username уже существует
   </div>
-  <form class="was-validated" method="post" action="/registration/student">
+  <form class="was-validated" method="post" action="/registration/company">
     <div class="form-row">
       <div class="form-group col md-6">
         <label for="validation_username">Имя пользователя</label>
@@ -53,31 +53,24 @@
     <div class="form-row">
 
       <div class="form-group col md-6">
-        <label for="validation_surname">Фамилия</label>
-        <input type="text" class="form-control is-invalid" id="validation_surname" placeholder="Иванов" name="surname" required></input>
+        <label for="validation_name">Название</label>
+        <input type="text" class="form-control is-invalid" id="validation_name" placeholder="My company" name="company_name" required></input>
         <div class="invalid-feedback">
-          Введите фамилию
+          Введите название своей компании
         </div>
       </div>
-
       <div class="form-group col md-6">
-        <label for="validation_firstname">Имя</label>
-        <input type="text" class="form-control is-invalid" id="validation_firstname" placeholder="Иван" name="first_name" required></input>
+        <label for="validation_address">Адрес</label>
+        <input type="text" class="form-control is-invalid" id="validation_address" placeholder="" name="address" required></input>
         <div class="invalid-feedback">
-          Введите имя
+          Введите адрес своей компании
         </div>
       </div>
-
-      <div class="form-group col md-6">
-        <label for="validation_lastname">Отчество</label>
-        <input type="text" class="form-control is-invalid" id="validation_lastname" placeholder="Иванович" name="last_name"></input>
-      </div>
-
     </div>
 
     <div class="mb-3">
-      <label for="validationTextarea">О себе</label>
-      <textarea class="form-control is-invalid" id="validationTextarea" placeholder="Здесь можно написать о своем образовании или увлечениях" name="description"></textarea>
+      <label for="validationTextarea">О компании</label>
+      <textarea class="form-control is-invalid" id="validationTextarea" placeholder="Здесь можно написать о своей компании" name="description"></textarea>
     </div>
     <div class="custom-control custom-checkbox mb-3">
       <input type="checkbox" class="custom-control-input" id="customControlValidation1" required>

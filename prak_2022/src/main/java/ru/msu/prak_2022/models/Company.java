@@ -13,15 +13,16 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Company {
     public Company(@NonNull Long company_id,
+                   @NonNull String username,
                    @NonNull String company_name,
                    @NonNull String address,
                    String description)
     {
         this.company_id = company_id;
+        this.username = username;
         this.company_name = company_name;
         this.address = address;
         this.description = description;
@@ -31,6 +32,10 @@ public class Company {
     @Column(name = "company_id")
     @NonNull
     private Long company_id;
+
+    @Column
+    @NonNull
+    private String username;
 
     @Column(name = "company_name")
     @NonNull

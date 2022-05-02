@@ -1,26 +1,51 @@
-<html>
-<head></head>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-top: 70px;
+        }
+    </style>
+    <title>Войти</title>
+</head>
 
 <body>
-<h1>Login</h1>
+<div th:replace="general :: error-header"></div>
+<div class="indent">
 
-<form name='f' action="perform_login" method='POST'>
+    <div class="row justify-content-center">
+    <div class="col-md-4 justify-content-center">
+        <div th:if="${login_error}" class="alert alert-danger" role="alert">
+            Неверный логин/пароль
+        </div>
 
-    <table>
-        <tr>
-            <td>User:</td>
-            <td><input type='text' name='username' value=''></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type='password' name='password' /></td>
-        </tr>
-        <tr>
-            <td><input name="submit" type="submit" value="submit" /></td>
-        </tr>
-    </table>
+        <div class="card" >
+            <article class="card-body">
+                <h4 class="card-title mb-4 mt-1">Вход</h4>
+                <form method="post" action="/perform_login">
+                    <div class="form-group">
+                        <label>Логин</label>
+                        <input name="username" class="form-control" placeholder="username" type="text">
+                    </div> <!-- form-group// -->
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input name="password" class="form-control" placeholder="******" type="password">
+                    </div> <!-- form-group// -->
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"> Войти  </button>
+                    </div> <!-- form-group// -->
+                </form>
+            </article>
+        </div> <!-- card.// -->
 
-</form>
-
+    </div> <!-- col.// -->
+</div>
+</div>
 </body>
 </html>

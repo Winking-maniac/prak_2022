@@ -18,11 +18,34 @@
 <div class="indent">
     <h1><p th:text="${course.getCourse_name()}"></h1>
     <br>
+    Компания: <a th:href="'/company?company_id=' + ${company.getCompany_id()}"><span th:text="${company.getCompany_name()}"> </span></a>
+    <br>
     <b>Дата начала:</b> <p th:text="${course.getDate_from()}"></p>
     <br>
     <b>Дата окончания:</b> <p th:text="${course.getDate_till()}"></p>
     <h3>Описание</h3>
     <p th:text="${course.getDescription()}"></p>
+    <h3>Преподаватели</h3>
+    <table class="table table-bordered table-warning">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col"> ФИО</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${teachers.isEmpty()}">
+            <td colspan="6"> Преподаватели не найдены </td>
+        </tr>
+        <tr th:each="teacher : ${teachers}">
+            <td>
+                <a th:href="'/teacher?teacher_id=' + ${teacher.getTeacher_id()}">
+                    <span th:text="${teacher.getFullName()}"> </span>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
 </div>
 
 <div th:replace="general :: site-footer"></div>

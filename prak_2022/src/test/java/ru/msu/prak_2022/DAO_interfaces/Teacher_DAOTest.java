@@ -32,8 +32,8 @@ class Teacher_DAOTest {
         session.createSQLQuery("TRUNCATE teacher_hub RESTART IDENTITY CASCADE;").executeUpdate();
         session.getTransaction().commit();
 
-        teacher_dao.save(new Teacher("Ivanov", "Ivan"));
-        teacher_dao.save(new Teacher("Petrov", "Petr"));
+        teacher_dao.save(new Teacher("admin", "Ivanov", "Ivan"));
+        teacher_dao.save(new Teacher("admin", "Petrov", "Petr"));
         gl_session.close();
     }
 
@@ -118,7 +118,7 @@ class Teacher_DAOTest {
     @Test
     void save() {
         gl_session.open();
-        status st = teacher_dao.save(new Teacher("No", "name"));
+        status st = teacher_dao.save(new Teacher("admin", "No", "name"));
         assertEquals(status.OK, st);
         AbstractMap.SimpleEntry<status, Teacher> res = teacher_dao.get(3L);
         assertEquals(status.OK, res.getKey());

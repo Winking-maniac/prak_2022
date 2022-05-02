@@ -12,6 +12,7 @@ import ru.msu.prak_2022.DAO_interfaces.Company_DAO;
 import ru.msu.prak_2022.DAO_interfaces.Course_DAO;
 import ru.msu.prak_2022.DAO_interfaces.Student_DAO;
 import ru.msu.prak_2022.DAO_interfaces.Teacher_DAO;
+import ru.msu.prak_2022.gl_session;
 import ru.msu.prak_2022.models.Company;
 import ru.msu.prak_2022.models.Course;
 import ru.msu.prak_2022.models.Student;
@@ -19,6 +20,7 @@ import ru.msu.prak_2022.models.Teacher;
 import ru.msu.prak_2022.status;
 
 import java.util.AbstractMap;
+import java.util.List;
 
 import static ru.msu.prak_2022.AuthInterceptor.add_auth;
 
@@ -55,30 +57,69 @@ public class PublicPagesController {
     @RequestMapping("/teacher")
     public String public_teacher(Model model, @RequestParam(defaultValue="0") Long teacher_id, Authentication auth) {
         add_auth(model, auth);
+        gl_session.open();
         AbstractMap.SimpleEntry<status, Teacher> res = teacher_dao.get(teacher_id);
-        if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
-        if (status.OK != res.getKey()) throw new InternalErrorException();
+        if (status.NOT_FOUND == res.getKey()) {
+            gl_session.close();
+            throw new ResourceNotFoundException();
+        }
+        if (status.OK != res.getKey()) {
+            gl_session.close();
+            throw new InternalErrorException();
+        }
         model.addAttribute("teacher", res.getValue());
+        List<Course> courses = teacher_dao.courses(res.getValue()).getValue();
+        List<Company> companies = teacher_dao.companies(res.getValue()).getValue();
+
+        model.addAttribute("courses", courses);
+        model.addAttribute("companies", companies);
+
+        if (courses.isEmpty()) model.addAttribute("empty_courses", true);
+        if (companies.isEmpty()) model.addAttribute("empty_companies", true);
         return "teacher";
     }
 
     @RequestMapping("/company")
     public String public_company(Model model, @RequestParam(defaultValue="0") Long company_id, Authentication auth) {
         add_auth(model, auth);
+        gl_session.open();
         AbstractMap.SimpleEntry<status, Company> res = company_dao.get(company_id);
-        if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
-        if (status.OK != res.getKey()) throw new InternalErrorException();
+        if (status.NOT_FOUND == res.getKey()) {
+            gl_session.close();
+            throw new ResourceNotFoundException();
+        }
+        if (status.OK != res.getKey()) {
+            gl_session.close();
+            throw new InternalErrorException();
+        }
         model.addAttribute("company", res.getValue());
+        List<Course> courses = company_dao.courses(res.getValue()).getValue();
+        if (courses.isEmpty()) model.addAttribute("empty", true);
+        model.addAttribute("courses", courses);
+
+        gl_session.close();
         return "company";
     }
 
     @RequestMapping("/student")
     public String public_student(Model model, @RequestParam(defaultValue="0") Long student_id, Authentication auth) {
         add_auth(model, auth);
+        gl_session.open();
         AbstractMap.SimpleEntry<status, Student> res = student_dao.get(student_id);
-        if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
-        if (status.OK != res.getKey()) throw new InternalErrorException();
-        model.addAttribute("teacher", res.getValue());
-        return "teacher";
+        if (status.NOT_FOUND == res.getKey()) {
+            gl_session.close();
+            throw new ResourceNotFoundException();
+        }
+        if (status.OK != res.getKey()) {
+            gl_session.close();
+            throw new InternalErrorException();
+        }
+        model.addAttribute("student", res.getValue());
+        List<Course> courses = student_dao.courses(res.getValue()).getValue();
+
+        model.addAttribute("courses", courses);
+
+        if (courses.isEmpty()) model.addAttribute("empty_courses", true);
+        return "student";
     }
 }

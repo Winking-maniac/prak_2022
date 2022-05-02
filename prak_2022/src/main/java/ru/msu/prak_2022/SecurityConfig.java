@@ -42,9 +42,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/").permitAll()
+                .antMatchers("/search/**").permitAll()
+                .antMatchers("/search*").permitAll()
+                .antMatchers("/course*").permitAll()
+                .antMatchers("/teacher*").permitAll()
+                .antMatchers("/company*").permitAll()
+                .antMatchers("/login_error").permitAll()
                 .antMatchers("/registration").anonymous()
                 .antMatchers("/registration/**").anonymous()
                 .antMatchers("/login*").permitAll()
+
                 .anyRequest().authenticated()
 
                 .and()
@@ -53,13 +60,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/perform_login")
                 .defaultSuccessUrl("/home", true)
-                .failureUrl("/login.html?error=true")
+                .failureUrl("/login?login_error=true")
 //                .failureHandler(authenticationFailureHandler())
 
                 .and()
 
                 .logout()
                 .logoutUrl("/perform_logout")
+                .logoutSuccessUrl("/")
                 .deleteCookies("JSESSIONID");
 //                .logoutSuccessHandler(logoutSuccessHandler());
     }

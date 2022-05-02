@@ -41,7 +41,7 @@ class Lesson_DAOTest {
         session.createSQLQuery("TRUNCATE teacher_hub RESTART IDENTITY CASCADE;").executeUpdate();
         session.createSQLQuery("TRUNCATE course_hub RESTART IDENTITY CASCADE;").executeUpdate();
         session.getTransaction().commit();
-        teacher_dao.save(new Teacher("Ivanov", "Ivan"));
+        teacher_dao.save(new Teacher("admin", "Ivanov", "Ivan"));
         session.close();
 
         gl_session.open();

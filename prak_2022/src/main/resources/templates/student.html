@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 70px;
+        }
+    </style>
+    <title>Преподаватель</title>
+</head>
+<body>
+<div th:replace="general :: page-header"></div>
+<div class="indent">
+    <h1><p th:text="${student.getFullName()}"></h1>
+    <br>
+    <h3>О себе</h3>
+    <p th:text="${student.getDescription()}"></p>
+
+    <h3>Курсы</h3>
+    <table class="table table-bordered table-warning">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col"> Название</th>
+            <th scope="col"> Дата начала</th>
+            <th scope="col"> Дата окончания</th>
+            <th scope="col"> Учебная нагрузка(в неделю)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${empty_courses}">
+            <td colspan="6"> Нет ни одного курса </td>
+        </tr>
+        <tr th:each="course : ${courses}">
+            <td>
+                <a th:href="'/course?course_id=' + ${course.getCourse_id()}">
+                    <span th:text="${course.getCourse_name()}"> </span>
+                </a>
+            </td>
+            <td>
+                <span th:text="${course.getDate_from()}"> </span>
+            </td>
+            <td>
+                <span th:text="${course.getDate_till()}"> </span>
+            </td>
+            <td>
+                <span th:text="${course.getLesson_intensivity()} + ' часов аудиторных занятий'"></span>
+                <br>
+                <span th:text="${course.getSelf_study_intensivity()} + ' часов самостоятельной работы'"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div th:replace="general :: site-footer"></div>
+<div th:replace="general :: site-script"></div>
+</body>

@@ -9,13 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ru.msu.prak_2022.gl_session;
-import ru.msu.prak_2022.models.Role;
-import ru.msu.prak_2022.models.User;
+import ru.msu.prak_2022.models.*;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,9 +45,13 @@ public class User_DAO implements UserDetailsService {
         User user = new User();
         user.setPassword(passwordEncoder.encode(passwd));
         user.setUsername(username);
-        user.setRoles(Collections.singleton(new Role(user_type)));
+        user.setRoles(new ArrayList<Role>(Collections.singleton(new Role(user_type))));
         session.save(user);
-        session.save(obj);
+        if (obj != null) session.save(obj);
+        if (obj instanceof Teacher) user.setForeign_id(((Teacher) obj).getTeacher_id());
+        if (obj instanceof Student) user.setForeign_id(((Student) obj).getStudent_id());
+        if (obj instanceof Company) user.setForeign_id(((Company) obj).getCompany_id());
+        session.save(user);
         gl_session.commit();
         return true;
     }
@@ -65,6 +69,7 @@ public class User_DAO implements UserDetailsService {
 
         Query query = session.createQuery(cr);
         List users = query.getResultList();
+        gl_session.commit();
         if (users.size() != 1) throw new UsernameNotFoundException("User not found");
         return (UserDetails) users.get(0);
     }
@@ -81,6 +86,7 @@ public class User_DAO implements UserDetailsService {
 
         Query query = session.createQuery(cr);
         List<User> users = query.getResultList();
+        gl_session.commit();
         if (users.size() != 1) return null;
         return users.get(0);
     }

@@ -49,18 +49,18 @@ class Relations_DAOTest {
         tearDown();
 
         gl_session.open();
-        student_dao.save(new Student(1L, "Ivanov", "Ivan"));
-        student_dao.save(new Student(2L, "Petrov", "Petr"));
+        student_dao.save(new Student(1L, "admin", "Ivanov", "Ivan"));
+        student_dao.save(new Student(2L, "admin", "Petrov", "Petr"));
         gl_session.close();
 
         gl_session.open();
-        teacher_dao.save(new Teacher("Kuznetsov", "Ivan"));
-        teacher_dao.save(new Teacher("Popov", "Petr"));
+        teacher_dao.save(new Teacher("admin", "Kuznetsov", "Ivan"));
+        teacher_dao.save(new Teacher("admin", "Popov", "Petr"));
         gl_session.close();
 
         gl_session.open();
-        company_dao.save(new Company(1L, "MSU", "Msk", ""));
-        company_dao.save(new Company(2L, "ISP RAS", "Msk", ""));
+        company_dao.save(new Company(1L, "admin", "MSU", "Msk", ""));
+        company_dao.save(new Company(2L, "admin", "ISP RAS", "Msk", ""));
         gl_session.close();
     }
 

@@ -20,8 +20,67 @@
   <br>
   <h3>О себе</h3>
   <p th:text="${teacher.getDescription()}"></p>
-</div>
 
+<h3>Курсы</h3>
+<table class="table table-bordered table-warning">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col"> Название</th>
+    <th scope="col"> Дата начала</th>
+    <th scope="col"> Дата окончания</th>
+    <th scope="col"> Учебная нагрузка(в неделю)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${empty_courses}">
+    <td colspan="6"> Нет ни одного курса </td>
+  </tr>
+  <tr th:each="course : ${courses}">
+    <td>
+      <a th:href="'/course?course_id=' + ${course.getCourse_id()}">
+        <span th:text="${course.getCourse_name()}"> </span>
+      </a>
+    </td>
+    <td>
+      <span th:text="${course.getDate_from()}"> </span>
+    </td>
+    <td>
+      <span th:text="${course.getDate_till()}"> </span>
+    </td>
+    <td>
+      <span th:text="${course.getLesson_intensivity()} + ' часов аудиторных занятий'"></span>
+      <br>
+      <span th:text="${course.getSelf_study_intensivity()} + ' часов самостоятельной работы'"></span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<h3>Компании</h3>
+<table class="table table-bordered table-warning">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col"> Название</th>
+    <th scope="col"> Адрес</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${empty_companies}">
+    <td colspan="6"> Не состоит ни в одной компании </td>
+  </tr>
+  <tr th:each="company : ${companies}">
+    <td>
+      <a th:href="'/company?company_id=' + ${company.getCompany_id()}">
+        <span th:text="${company.getCompany_name()}"> </span>
+      </a>
+    </td>
+    <td>
+      <span th:text="${company.getAddress()}"> </span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>
 <div th:replace="general :: site-footer"></div>
 <div th:replace="general :: site-script"></div>
 </body>

@@ -15,15 +15,18 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Teacher {
-    public Teacher(@NonNull String surname,
-               @NonNull String first_name) {
-        this(surname, first_name, "", "");
+    public Teacher(@NonNull String username,
+                   @NonNull String surname,
+                   @NonNull String first_name) {
+        this(username, surname, first_name, "", "");
     }
 
-    public Teacher(@NonNull String surname,
+    public Teacher(@NonNull String username,
+                   @NonNull String surname,
                    @NonNull String first_name,
                    String last_name,
                    String description) {
+        this.username = username;
         this.surname = surname;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -35,6 +38,10 @@ public class Teacher {
     @Column(name = "teacher_id")
     @NonNull
     private Long teacher_id;
+
+    @Column
+    @NonNull
+    private String username;
 
     @Column(name = "surname")
     @NonNull
@@ -67,11 +74,11 @@ public class Teacher {
         if (this == o) return true;
         if (!(o instanceof Teacher)) return false;
         Teacher teacher = (Teacher) o;
-        return getTeacher_id().equals(teacher.getTeacher_id()) && getSurname().equals(teacher.getSurname()) && getFirst_name().equals(teacher.getFirst_name()) && Objects.equals(getLast_name(), teacher.getLast_name()) && Objects.equals(getDescription(), teacher.getDescription());
+        return getTeacher_id().equals(teacher.getTeacher_id()) && getSurname().equals(teacher.getSurname()) && getFirst_name().equals(teacher.getFirst_name()) && Objects.equals(getLast_name(), teacher.getLast_name()) && Objects.equals(getDescription(), teacher.getDescription()) && Objects.equals(getUsername(), teacher.getUsername());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTeacher_id(), getSurname(), getFirst_name(), getLast_name(), getDescription());
+        return Objects.hash(getTeacher_id(), getSurname(), getFirst_name(), getLast_name(), getDescription(), getUsername());
     }
 }

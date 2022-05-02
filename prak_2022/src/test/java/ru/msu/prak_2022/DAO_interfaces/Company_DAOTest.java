@@ -37,8 +37,8 @@ class Company_DAOTest {
 //        session.createSQLQuery("INSERT INTO company_hub (company_id, company_name, company_address, description) VALUES (1, \"MSU\", \"Msk\", \"\"), (2, \"ISP RAS\", \"Msk\", \"\");").executeUpdate();
         session.getTransaction().commit();
 
-        company_dao.save(new Company(1L, "MSU", "Msk", ""));
-        company_dao.save(new Company(2L, "ISP RAS", "Msk", ""));
+        company_dao.save(new Company(1L, "admin", "MSU", "Msk", ""));
+        company_dao.save(new Company(2L, "admin", "ISP RAS", "Msk", ""));
 //        gl_session.close();
     }
 
@@ -102,7 +102,7 @@ class Company_DAOTest {
     @Test
     void save() {
         gl_session.open();
-        status st = company_dao.save(new Company(3L, "No", "name", ""));
+        status st = company_dao.save(new Company(3L, "admin", "No", "name", ""));
         assertEquals(status.OK, st);
         AbstractMap.SimpleEntry<status, Company> res = company_dao.get(3L);
         assertEquals(status.OK, res.getKey());
