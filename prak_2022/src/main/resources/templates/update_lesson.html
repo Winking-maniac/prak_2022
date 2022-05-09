@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 70px;
+        }
+    </style>
+    <title>ф</title>
+</head>
+<body>
+<div th:replace="general :: page-header"></div>
+<div class="indent">
+    <h1>Новый урок</h1>
+    <form class="was-validated" method="post" action="/update_lesson">
+        <div class="form-row">
+            <div class="form-group col md 6">
+                <label for="teacher">Преподаватель</label>
+                <select name="teacher_id" id="teacher" class="form-control is-invalid" required>
+                    <option th:each="teacher : ${teachers}" th:value="${teacher.getTeacher_id()}" th:selected="${teacher.getTeacher_id() == lesson.getTeacher().getTeacher_id()}"><span th:text="${teacher.getFullName()}"></span></option>
+                </select>
+            </div>
+            <input type="hidden" th:value="${lesson.getLesson_id()}" name="lesson_id"/>
+
+            <div class="form-group col md-6">
+                <label for="validation_passwd">Время начала</label>
+                <input type="datetime-local" class="form-control is-invalid" id="validation_passwd" th:value="${lesson.getTime_from(true)}" name="time_from" required></input>
+                <div class="invalid-feedback">
+                    Введите время начала
+                </div>
+            </div>
+
+
+            <div class="form-group col md-6">
+                <label for="validation_passwd_confirm">Время окончания</label>
+                <input type="datetime-local" class="form-control is-invalid" id="validation_passwd_confirm" th:value="${lesson.getTime_till(true)}" name="time_till" required></input>
+                <div class="invalid-feedback">
+                    Введите время окончания
+                </div>
+            </div>
+            <!--        </div>-->
+            <!--        <div class="form-row">-->
+
+
+        </div>
+
+        <div class="mb-3">
+            <label for="validationTextarea">Описание</label>
+            <textarea class="form-control is-invalid" id="validationTextarea" th:text="${lesson.getDescription()}" name="description"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+    </form>
+</div>
+<div th:replace="general :: site-footer"></div>
+</body>
+</html>

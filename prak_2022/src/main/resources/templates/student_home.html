@@ -20,16 +20,22 @@
 <body>
 <div th:replace="general :: page-header"></div>
 <div class="indent">
-  <form class="was-validated" method="post" action="/registration/student">
-    <div class="form-row">
-      <div class="form-group col md-6">
-        <label for="validation_username">Имя пользователя</label>
-        <input type="text" class="form-control is-invalid" id="validation_username" th:value="${username}" name="username" required disabled></input>
-        <div class="invalid-feedback">
-        </div>
-      </div>
-
-    </div>
+  <div class="row no-gutters">
+    <div class="col-sm"><h1>Приветствуем, <span th:text="${username}"></span></h1></div>
+<!--    <div class="col-sm"><p class="text-right">-->
+<!--      <span th:if="${can_unenroll}"><a th:href="'/student/unenroll?from=course&course_id=' + ${course.getCourse_id()}"><button type="button" class="btn btn-danger" >Отписаться</button></a></span>-->
+<!--      <span th:if="${can_unenroll}"><a th:href="'/lessons?course_id=' + ${course.getCourse_id()}"><button type="button" class="btn btn-primary" >К занятиям</button></a></span>-->
+<!--      <span th:if="${can_enroll}"><a th:href="'/student/enroll?course_id=' + ${course.getCourse_id()}"><button type="button" class="btn btn-success" >Записаться</button></a></span>-->
+<!--      <span th:if="${can_manage}"><a th:href="'/manage?course_id=' + ${course.getCourse_id()}"><button type="button" class="btn btn-warning" >-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">-->
+<!--                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>-->
+<!--                </svg>-->
+<!--                Управлять-->
+<!--            </button></a></span>-->
+<!--      <span th:if="${to_lessons}"><a th:href="'/lessons?course_id=' + ${course.getCourse_id()}"><button type="button" class="btn btn-primary">К занятиям</button></a></span>-->
+<!--    </p></div>-->
+  </div>
+  <form class="was-validated" method="post" action="/student/perform_update">
     <div class="form-row">
 
       <div class="form-group col md-6">
@@ -61,6 +67,45 @@
     </div>
     <button class="btn btn-primary" type="submit">Сохранить</button>
   </form>
+  <br>
+  <h3>Курсы</h3>
+  <table class="table table-bordered table-warning">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col"> Название</th>
+      <th scope="col"> Дата начала</th>
+      <th scope="col"> Дата окончания</th>
+      <th scope="col"> Учебная нагрузка(в неделю)</th>
+      <th scope="col"> Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${empty_courses}">
+      <td colspan="6"> Нет ни одного курса </td>
+    </tr>
+    <tr th:each="course : ${courses}">
+      <td>
+        <a th:href="'/course?course_id=' + ${course.getCourse_id()}">
+          <span th:text="${course.getCourse_name()}"> </span>
+        </a>
+      </td>
+      <td>
+        <span th:text="${course.getDate_from()}"> </span>
+      </td>
+      <td>
+        <span th:text="${course.getDate_till()}"> </span>
+      </td>
+      <td>
+        <span th:text="${course.getLesson_intensivity()} + ' часов аудиторных занятий'"></span>
+        <br>
+        <span th:text="${course.getSelf_study_intensivity()} + ' часов самостоятельной работы'"></span>
+      </td>
+      <td>
+        <a th:href="'/student/unenroll?from=home&course_id=' + ${course.getCourse_id()}"><button type="button" class="btn btn-danger" >Отписаться</button></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
   <br>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">

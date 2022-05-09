@@ -13,6 +13,8 @@ import ru.msu.prak_2022.status;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class Lesson_DAO_impl extends Default_DAO_impl<Lesson, Long> implements Lesson_DAO {
@@ -24,12 +26,12 @@ public class Lesson_DAO_impl extends Default_DAO_impl<Lesson, Long> implements L
         return new SimpleEntry<>(status.OK, lesson.getTeacher());
     }
 
-    public SimpleEntry<status, List<SimpleEntry<Long, Long>>> scores(@NonNull Lesson lesson) {
+    public SimpleEntry<status, Map<Long, Long>> scores(@NonNull Lesson lesson) {
         Session session = gl_session.sessionFactory.getCurrentSession();
         session.beginTransaction();
         session.refresh(lesson);
         Hibernate.initialize(lesson.getStudents());
         session.getTransaction().commit();
-        return new SimpleEntry<>(status.OK, lesson.getStudents().stream().map(sl -> new SimpleEntry<>(sl.getStudent_id(), sl.getScore())).toList());
+        return new SimpleEntry<>(status.OK, lesson.getStudents().stream().map(sl -> new SimpleEntry<>(sl.getStudent_id(), sl.getScore())).collect(Collectors.toMap(o -> o.getKey(), o -> o.getValue())));
     }
 }

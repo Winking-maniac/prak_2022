@@ -61,22 +61,28 @@ public class SearchController {
 
     @GetMapping("/search/courses")
     String courses_search_results(Model model, @RequestParam(defaultValue = "") String pattern, Authentication auth) {
+        gl_session.open();
         String res = search_result(model, pattern, course_dao, auth);
         if (Objects.equals(res, "search_results")) res = "course_search_results";
+        gl_session.close();
         return res;
     }
 
     @GetMapping("/search/teachers")
     String teachers_search_results(Model model, @RequestParam(defaultValue = "") String pattern, Authentication auth) {
+        gl_session.open();
         String res = search_result(model, pattern, teacher_dao, auth);
         if (Objects.equals(res, "search_results")) res = "teacher_search_results";
+        gl_session.close();
         return res;
     }
 
     @GetMapping("/search/companies")
     String companies_search_results(Model model, @RequestParam(defaultValue = "") String pattern, Authentication auth) {
+        gl_session.open();
         String res = search_result(model, pattern, company_dao, auth);
         if (Objects.equals(res, "search_results")) res = "company_search_results";
+        gl_session.close();
         return res;
     }
 

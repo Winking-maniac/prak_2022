@@ -65,4 +65,13 @@ public class Company_DAO_impl extends simple_hub_DAO_impl<Company> implements Co
         session.getTransaction().commit();
         return new AbstractMap.SimpleEntry<>(status.OK, (List<Teacher>) company.getTeachers().stream().filter(CompanyTeacher::is_approved).map(CompanyTeacher::getTeacher).toList());
     }
+
+    public AbstractMap.SimpleEntry<status, List<Teacher>> invites(@NonNull Company company) {
+        Session session = gl_session.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.refresh(company);
+        Hibernate.initialize(company.getTeachers());
+        session.getTransaction().commit();
+        return new AbstractMap.SimpleEntry<>(status.OK, (List<Teacher>) company.getTeachers().stream().filter(ct -> !ct.is_approved()).map(CompanyTeacher::getTeacher).toList());
+    }
 }

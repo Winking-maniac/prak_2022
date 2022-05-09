@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.msu.prak_2022.DAO_implementations.User_DAO;
+import ru.msu.prak_2022.gl_session;
 import ru.msu.prak_2022.models.Company;
 import ru.msu.prak_2022.models.Student;
 import ru.msu.prak_2022.models.Teacher;
@@ -81,6 +82,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", true);
             return "student_registration";
         }
+        gl_session.open();
 
         Student st = new Student();
         st.setDescription(description);
@@ -90,10 +92,12 @@ public class RegistrationController {
         st.setUsername(username);
 
         if (!user_dao.save_user(1L, username, passwd, st)){
+            gl_session.close();
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "student_registration";
         }
 
+        gl_session.close();
         return "redirect:/";
     }
 
@@ -111,6 +115,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", true);
             return "teacher_registration";
         }
+        gl_session.open();
 
         Teacher st = new Teacher();
         st.setDescription(description);
@@ -121,9 +126,11 @@ public class RegistrationController {
 
         if (!user_dao.save_user(2L, username, passwd, st)){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
+            gl_session.close();
             return "teacher_registration";
         }
 
+        gl_session.close();
         return "redirect:/";
     }
 
@@ -140,6 +147,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", true);
             return "company_registration";
         }
+        gl_session.open();
 
         Company st = new Company();
         st.setDescription(description);
@@ -147,11 +155,13 @@ public class RegistrationController {
         st.setAddress(address);
         st.setUsername(username);
 
-        if (!user_dao.save_user(2L, username, passwd, st)){
+        if (!user_dao.save_user(3L, username, passwd, st)){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
+            gl_session.close();
             return "teacher_registration";
         }
 
+        gl_session.close();
         return "redirect:/";
     }
 

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -93,5 +94,23 @@ public class Lesson implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(getLesson_id(), getCourse_id(), getTeacher_id(), getCourse(), getTeacher(), getTime_from(), getTime_till(), getDescription());
+    }
+
+    public String getTime_from() {
+        return String.format("%1$TD %1$TT", this.time_from);
+//        return String.format("%1$TD %1$TT", this.time_from);
+    }
+
+    public String getTime_till() {
+        return String.format("%1$TD %1$TT", this.time_till);
+//        return this.time_till.toLocalDateTime();
+    }
+
+    public LocalDateTime getTime_from(boolean x) {
+        return this.time_from.toLocalDateTime();
+    }
+
+    public LocalDateTime getTime_till(boolean x) {
+        return this.time_till.toLocalDateTime();
     }
 }

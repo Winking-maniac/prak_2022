@@ -10,4 +10,5 @@ import java.util.List;
 public interface Company_DAO extends Default_DAO<Company, Long>, simple_hub_DAO<Company>, Searchable<Company>{
     AbstractMap.SimpleEntry<status, List<Course>> courses(@NonNull Company company);
     AbstractMap.SimpleEntry<status, List<Teacher>> teachers(@NonNull Company company);
+    AbstractMap.SimpleEntry<status, List<Teacher>> invites(@NonNull Company company);
 }

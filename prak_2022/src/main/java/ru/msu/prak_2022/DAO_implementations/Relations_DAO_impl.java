@@ -82,6 +82,14 @@ public class Relations_DAO_impl implements Relations_DAO {
         return new SimpleEntry<>(status.OK, TRUE);
     }
 
+    public SimpleEntry<status, Boolean> is_invited(@NonNull Teacher teacher, @NonNull Company company) {
+        Session session = gl_session.sessionFactory.getCurrentSession();
+        val companies = teacher_dao.invites(teacher);
+        if (companies.getKey() != status.OK) return new SimpleEntry<>(companies.getKey(), null);
+        if (!companies.getValue().contains(company)) return new SimpleEntry<>(status.OK, FALSE);
+        return new SimpleEntry<>(status.OK, TRUE);
+    }
+
     public status approve(@NonNull Teacher teacher, @NonNull Company company) {
         Session session = gl_session.sessionFactory.getCurrentSession();
         val companies = teacher_dao.invites(teacher);
@@ -114,7 +122,9 @@ public class Relations_DAO_impl implements Relations_DAO {
         Session session = gl_session.sessionFactory.getCurrentSession();
         val companies = teacher_dao.companies(teacher);
         if (companies.getKey() != status.OK) return companies.getKey();
-        if (!companies.getValue().contains(company)) return status.RELATION_NOT_FOUND;
+        val invites = teacher_dao.invites(teacher);
+        if (companies.getKey() != status.OK) return invites.getKey();
+        if (!companies.getValue().contains(company) && !invites.getValue().contains(company)) return status.RELATION_NOT_FOUND;
         gl_session.close();
         gl_session.open();
         session = gl_session.sessionFactory.getCurrentSession();
@@ -325,7 +335,7 @@ public status create_lesson(@NonNull Teacher teacher,
     val rel = is_admin(teacher, course);
     if (rel.getKey() == status.RELATION_NOT_FOUND) return status.FORBIDDEN;
     if (rel.getKey() != status.OK) return rel.getKey();
-    if (rel.getValue() != TRUE) return status.FORBIDDEN;
+//    if (rel.getValue() != TRUE) return status.FORBIDDEN;
 
     Session session = gl_session.sessionFactory.getCurrentSession();
     session.beginTransaction();
@@ -349,7 +359,7 @@ public status create_lesson(@NonNull Teacher teacher,
 
         try (Session session = gl_session.sessionFactory.getCurrentSession()) {
             session.beginTransaction();
-            session.saveOrUpdate(new Lesson(lesson_id,
+            session.delete(new Lesson(lesson_id,
                     course,
                     teacher));
             session.getTransaction().commit();
@@ -381,10 +391,17 @@ public status create_lesson(@NonNull Teacher teacher,
 
         Session session = gl_session.sessionFactory.getCurrentSession();
         gl_session.beginTransaction();
-        session.saveOrUpdate(new StudentLesson(lesson.getLesson_id(),
-                                                lesson.getCourse_id(),
-                                                student.getStudent_id(),
-                                                score));
+        if (score != null) {
+            session.saveOrUpdate(new StudentLesson(lesson.getLesson_id(),
+                    lesson.getCourse_id(),
+                    student.getStudent_id(),
+                    score));
+        } else {
+            session.delete(new StudentLesson(lesson.getLesson_id(),
+                    lesson.getCourse_id(),
+                    student.getStudent_id(),
+                    score));
+        }
         gl_session.commit();
         return status.OK;
     }

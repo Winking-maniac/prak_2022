@@ -12,6 +12,7 @@ public interface Relations_DAO {
     status unenroll(@NonNull Student student, @NonNull Course course);
     AbstractMap.SimpleEntry<status, Boolean> is_student(@NonNull Student student, @NonNull Course course);
     AbstractMap.SimpleEntry<status, Boolean> is_member(@NonNull Teacher teacher, @NonNull Company company);
+    AbstractMap.SimpleEntry<status, Boolean> is_invited(@NonNull Teacher teacher, @NonNull Company company);
     status approve(@NonNull Teacher teacher, @NonNull Company company);
     status reject(@NonNull Teacher teacher, @NonNull Company company);
     status retire(@NonNull Teacher teacher, @NonNull Company company);

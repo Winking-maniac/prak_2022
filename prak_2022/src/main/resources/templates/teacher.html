@@ -16,7 +16,17 @@
 <body>
 <div th:replace="general :: page-header"></div>
 <div class="indent">
-  <h1><p th:text="${teacher.getFullName()}"></h1>
+  <div class="row no-gutters">
+    <div class="col-sm"><h1><span th:text="${teacher.getFullName()}"></h1></div>
+    <div class="col-sm"><p class="text-right">
+    </p></div>
+    <div class="col-sm"><p class="text-right">
+      <span th:if="${can_invite}"><a th:href="'/company/invite?teacher_id=' + ${teacher.getTeacher_id()}"><button type="button" class="btn btn-primary" >Пригласить</button></a></span>
+      <span th:if="${can_uninvite}"><a th:href="'/company/fire?from=teacher&teacher_id=' + ${teacher.getTeacher_id()}"><button type="button" class="btn btn-secondary" >Отменить приглашение</button></a></span>
+      <span th:if="${can_fire}"><a th:href="'/company/fire?from=teacher&teacher_id=' + ${teacher.getTeacher_id()}"><button type="button" class="btn btn-danger" >Уволить</button></a></span>
+    </p></div>
+  </div>
+
   <br>
   <h3>О себе</h3>
   <p th:text="${teacher.getDescription()}"></p>

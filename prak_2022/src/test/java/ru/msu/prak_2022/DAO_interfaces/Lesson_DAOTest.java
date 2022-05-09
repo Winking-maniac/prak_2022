@@ -12,10 +12,7 @@ import ru.msu.prak_2022.models.*;
 import ru.msu.prak_2022.status;
 
 import java.sql.Date;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,7 +92,7 @@ class Lesson_DAOTest {
     @Test
     void scores() {
         gl_session.open();
-        AbstractMap.SimpleEntry<status, List<AbstractMap.SimpleEntry<Long, Long>>> res = lesson_dao.scores(lesson_dao.get(1L).getValue());
+        AbstractMap.SimpleEntry<status, Map<Long, Long>> res = lesson_dao.scores(lesson_dao.get(1L).getValue());
         assertEquals(status.OK, res.getKey());
         assertEquals(0, res.getValue().size());
         gl_session.close();

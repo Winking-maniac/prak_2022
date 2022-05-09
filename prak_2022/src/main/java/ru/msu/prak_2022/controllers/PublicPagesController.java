@@ -8,15 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.msu.prak_2022.DAO_interfaces.Company_DAO;
-import ru.msu.prak_2022.DAO_interfaces.Course_DAO;
-import ru.msu.prak_2022.DAO_interfaces.Student_DAO;
-import ru.msu.prak_2022.DAO_interfaces.Teacher_DAO;
+import org.thymeleaf.standard.expression.GreaterLesserExpression;
+import ru.msu.prak_2022.DAO_implementations.User_DAO;
+import ru.msu.prak_2022.DAO_interfaces.*;
 import ru.msu.prak_2022.gl_session;
-import ru.msu.prak_2022.models.Company;
-import ru.msu.prak_2022.models.Course;
-import ru.msu.prak_2022.models.Student;
-import ru.msu.prak_2022.models.Teacher;
+import ru.msu.prak_2022.models.*;
 import ru.msu.prak_2022.status;
 
 import java.util.AbstractMap;
@@ -35,6 +31,10 @@ public class PublicPagesController {
     Teacher_DAO teacher_dao;
     @Autowired
     Company_DAO company_dao;
+    @Autowired
+    Relations_DAO relations_dao;
+    @Autowired
+    User_DAO user_dao;
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public class ResourceNotFoundException extends RuntimeException {
@@ -47,10 +47,57 @@ public class PublicPagesController {
     @RequestMapping("/course")
     public String public_course(Model model, @RequestParam(defaultValue="0") Long course_id, Authentication auth) {
         add_auth(model, auth);
+        gl_session.open();
         AbstractMap.SimpleEntry<status, Course> res = course_dao.get(course_id);
-        if (status.NOT_FOUND == res.getKey()) throw new ResourceNotFoundException();
-        if (status.OK != res.getKey()) throw new InternalErrorException();
+        if (status.NOT_FOUND == res.getKey()) {
+            gl_session.close();
+            throw new ResourceNotFoundException();
+        }
+        if (status.OK != res.getKey()) {
+            gl_session.close();
+            throw new InternalErrorException();
+        }
         model.addAttribute("course", res.getValue());
+        model.addAttribute("company", course_dao.companies(res.getValue()).getValue().get(0));
+        List<Teacher> teachers = course_dao.teachers(res.getValue()).getValue();
+        model.addAttribute("teachers", teachers);
+        if (teachers.isEmpty()) model.addAttribute("empty_teacher", true);
+
+        if (auth != null) {
+            User user = user_dao.by_username(auth.getName());
+            Role role = user.getRoles().get(0);
+            if (role.getName().equals("ROLE_STUDENT")) {
+                AbstractMap.SimpleEntry<status, Boolean> res1 = relations_dao.is_student(student_dao.get(user.getForeign_id()).getValue(), res.getValue());
+                if (res1.getKey() != status.OK) {
+                    gl_session.close();
+                    throw new InternalErrorException();
+                }
+                if (res1.getValue()) model.addAttribute("can_unenroll", true);
+                else model.addAttribute("can_enroll", true);
+            } else if (role.getName().equals("ROLE_TEACHER")) {
+                AbstractMap.SimpleEntry<status, Boolean> res1 = relations_dao.is_admin(teacher_dao.get(user.getForeign_id()).getValue(), res.getValue());
+                if (res1.getKey() == status.OK) {
+                    model.addAttribute("to_lessons", true);
+                    model.addAttribute("teacher_manage", res1.getValue());
+                } else if (res1.getKey() == status.RELATION_NOT_FOUND) {
+                    ;
+                } else {
+                    gl_session.close();
+                    throw new InternalErrorException();
+                }
+            } else if (role.getName().equals("ROLE_COMPANY")) {
+                AbstractMap.SimpleEntry<status, Boolean> res1 = relations_dao.is_author(company_dao.get(user.getForeign_id()).getValue(), res.getValue());
+                if (res1.getKey() == status.OK) {
+                    model.addAttribute("company_manage", res1.getValue());
+                } else if (res1.getKey() == status.RELATION_NOT_FOUND) {
+                    ;
+                } else {
+                    gl_session.close();
+                    throw new InternalErrorException();
+                }
+            }
+        }
+        gl_session.close();
         return "course";
     }
 
@@ -67,6 +114,35 @@ public class PublicPagesController {
             gl_session.close();
             throw new InternalErrorException();
         }
+
+        if (auth != null) {
+            User user = user_dao.by_username(auth.getName());
+            Role role = user.getRoles().get(0);
+            if (role.getName().equals("ROLE_STUDENT")) {
+                ;
+            } else if (role.getName().equals("ROLE_TEACHER")) {
+                ;
+            } else if (role.getName().equals("ROLE_COMPANY")) {
+                AbstractMap.SimpleEntry<status, Boolean> res1 = relations_dao.is_member(res.getValue(), company_dao.get(user.getForeign_id()).getValue());
+                if (res1.getKey() == status.OK) {
+                    model.addAttribute("can_fire", res1.getValue());
+                } else {
+                    gl_session.close();
+                    throw new InternalErrorException();
+                }
+                if (!res1.getValue()) {
+                    res1 = relations_dao.is_invited(res.getValue(), company_dao.get(user.getForeign_id()).getValue());
+                    if (res1.getKey() == status.OK) {
+                        model.addAttribute("can_uninvite", res1.getValue());
+                        model.addAttribute("can_invite", !res1.getValue());
+                    } else {
+                        gl_session.close();
+                        throw new InternalErrorException();
+                    }
+                }
+            }
+        }
+
         model.addAttribute("teacher", res.getValue());
         List<Course> courses = teacher_dao.courses(res.getValue()).getValue();
         List<Company> companies = teacher_dao.companies(res.getValue()).getValue();
@@ -74,6 +150,7 @@ public class PublicPagesController {
         model.addAttribute("courses", courses);
         model.addAttribute("companies", companies);
 
+        gl_session.close();
         if (courses.isEmpty()) model.addAttribute("empty_courses", true);
         if (companies.isEmpty()) model.addAttribute("empty_companies", true);
         return "teacher";
@@ -120,6 +197,8 @@ public class PublicPagesController {
         model.addAttribute("courses", courses);
 
         if (courses.isEmpty()) model.addAttribute("empty_courses", true);
+
+        gl_session.close();
         return "student";
     }
 }
